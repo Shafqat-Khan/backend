@@ -2,7 +2,7 @@
   "name": "gaztron",
   "version": "0.0.0",
   "scripts": {
-    "start:server": "node server.js"
+    "start": "node server.js"
   },
   "private": true,
   "dependencies": {
