@@ -11,10 +11,18 @@ const contactRoutes = require('./routes/contact');
 const jobRoutes = require('./routes/job');
 const clientRoutes = require('./routes/client');
 const seoRoutes = require('./routes/seo');
+const aboutSeoRoutes = require('./routes/aboutseo');
+const careerSeoRoutes = require('./routes/careerseo');
+const contactSeoRoutes = require('./routes/contactseo');
+const hydrogenSeoRoutes = require('./routes/hydrogenseo');
+const oxygenSeoRoutes = require('./routes/oxygenseo');
+const nitrogenSeoRoutes = require('./routes/nitrogenseo');
 const userRoutes = require('./routes/user');
 const careerRoutes = require('./routes/career');
+const copyrightRoutes = require('./routes/copyright');
 const subscriberRoutes = require('./routes/subscribers');
 const app = express();
+
 
 mongoose.connect("mongodb+srv://gaztron:PL7QKJxlbncRc80e@cluster0.jdqnsl0.mongodb.net/gaztron?retryWrites=true&w=majority")
 .then(()=>{
@@ -58,7 +66,14 @@ app.use("/api/contact/", contactRoutes);
 app.use("/api/jobs/", jobRoutes);
 app.use("/api/clients/", clientRoutes);
 app.use("/api/seo/", seoRoutes);
+app.use("/api/about-seo/", aboutSeoRoutes);
+app.use("/api/career-seo/", careerSeoRoutes);
+app.use("/api/contact-seo/", contactSeoRoutes);
+app.use("/api/hydrogen-seo/", hydrogenSeoRoutes);
+app.use("/api/nitrogen-seo/", nitrogenSeoRoutes);
+app.use("/api/oxygen-seo/", oxygenSeoRoutes);
 app.use("/api/user/", userRoutes);
+app.use("/api/copyright/", copyrightRoutes);
 app.use("/api/career/", careerRoutes);
 app.use("/api/subscribers/", subscriberRoutes);
 app.use((req, res, next)=>{
