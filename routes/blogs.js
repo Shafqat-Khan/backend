@@ -42,9 +42,9 @@ router.post(
   // ]),
   (req, res, next) => {
     console.log(req.body, "Request reached")
-    const imageUrl = req.protocol + "://" + req.get("host");
-    const image = imageUrl + "/images/" + req.files["image"][0].filename;
-    console.log("imagePath", image)
+    // const imageUrl = req.protocol + "://" + req.get("host");
+    // const image = imageUrl + "/images/" + req.files["image"][0].filename;
+    // console.log("imagePath", image)
     const blog = new Blog({
       heading: req.body.heading,
       description: req.body.description,
