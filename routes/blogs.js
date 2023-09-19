@@ -48,7 +48,7 @@ router.post(
     const blog = new Blog({
       heading: req.body.heading,
       description: req.body.description,
-      imagePath: image, 
+      imagePath: req.body.imagePath, 
     });
     console.log("blog", blog)
     blog.save().then((createdBlog) => {
