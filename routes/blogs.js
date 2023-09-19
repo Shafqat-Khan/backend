@@ -12,12 +12,15 @@ const MIME_TYPE_MAP = {
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const isValidImage = MIME_TYPE_MAP[file.mimetype];
+    console.log(file)
+    console.log(req.body,"BODY")
 
     let error = new Error(
       `Invalid mime type ${file.mimetype}, only image and logo are allowed`
     );
 
     if (isValidImage) {
+      console.log("In multer")
       error = null;
       cb(null, "images"); 
     } 
