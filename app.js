@@ -31,15 +31,15 @@ mongoose.connect("mongodb+srv://gaztron:PL7QKJxlbncRc80e@cluster0.jdqnsl0.mongod
 .catch(() =>{
   console.error("Connection Failed!");
 });
-app.use("/images", express.static(path.join(__dirname ,"/backend/images")));
-app.use("/files", express.static(path.join(__dirname ,"/backend/files")));
+app.use("/images", express.static(path.join(__dirname ,"images")));
+app.use("/files", express.static(path.join(__dirname ,"files")));
 app.use("/", express.static(path.join(__dirname ,"gaztron")));
 
 
 
 
 app.use(express.json());
-// app.use("/images", express.static(path.join("backend/images")));
+app.use("/images", express.static(path.join("backend/images")));
 
 app.use((req, res, next) => {
 
