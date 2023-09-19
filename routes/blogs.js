@@ -37,9 +37,9 @@ const storage = multer.diskStorage({
 router.post(
   "",
   
-  multer({ storage: storage }).fields([
-    { name: "image", maxCount: 1 }, 
-  ]),
+  // multer({ storage: storage }).fields([
+  //   { name: "image", maxCount: 1 }, 
+  // ]),
   (req, res, next) => {
     console.log(req.body, "Request reached")
     const imageUrl = req.protocol + "://" + req.get("host");
