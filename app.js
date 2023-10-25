@@ -24,7 +24,7 @@ const subscriberRoutes = require('./routes/subscribers');
 const app = express();
 
 
-mongoose.connect("mongodb+srv://gaztron:PL7QKJxlbncRc80e@cluster0.jdqnsl0.mongodb.net/gaztron?retryWrites=true&w=majority")
+mongoose.connect("mongodb+srv://gaztron:nNuy4YcGLUsZg4KQ@cluster0.1m4d7fx.mongodb.net/?retryWrites=true&w=majority")
 .then(()=>{
   console.log(`Connected to MongoDB`);
 })
