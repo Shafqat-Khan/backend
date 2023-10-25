@@ -11,7 +11,6 @@ const MIME_TYPE_MAP = {
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    // Determine the destination directory based on the file type
     const isValidImage = MIME_TYPE_MAP[file.mimetype];
     const isValidLogo = MIME_TYPE_MAP[file.mimetype];
 
@@ -21,7 +20,7 @@ const storage = multer.diskStorage({
 
     if (isValidImage && isValidLogo) {
       error = null;
-      cb(null, "images"); 
+      cb(null, "backend/images"); 
     } 
      else {
       cb(error, null);
@@ -45,7 +44,6 @@ router.post(
     const imageUrl = req.protocol + "://" + req.get("host");
     const image = imageUrl + "/images/" + req.files["image"][0].filename;
     const logo = imageUrl + "/images/" + req.files["logo"][0].filename;
-    console.log(logo)
     const banners = new Banners({
       heading: req.body.heading,
       description: req.body.description,
@@ -72,7 +70,6 @@ router.post(
     { name: "logo", maxCount: 1 },
   ]),
   (req, res, next) => {
-    console.log(req.body,"GGGG")
     const bannerId = req.params.id;
 
     const imageUrl = req.protocol + "://" + req.get("host");
@@ -86,17 +83,14 @@ router.post(
       imagePath: image,
       logoPath: logo,
     };
-    console.log(updatedBanner,"GG")
     Banners.findByIdAndUpdate(bannerId, updatedBanner, { new: true })
       .then((updatedBanner) => {
         if (!updatedBanner) {
           return res.status(404).json({ error: "Banner not found" });
         }
-        console.log(updatedBanner);
         res.status(200).json({ message: "Data updated successfully", banner: updatedBanner });
       })
       .catch((error) => {
-        console.error(error);
         res.status(500).json({ error: "Internal server error" });
       });
   }
@@ -124,11 +118,9 @@ router.put(
         if (!updatedBanner) {
           return res.status(404).json({ error: "Banner not found" });
         }
-        console.log(updatedBanner);
         res.status(200).json({ message: "Data updated successfully", banner: updatedBanner });
       })
       .catch((error) => {
-        console.error(error);
         res.status(500).json({ error: "Internal server error" });
       });
   }
@@ -142,7 +134,6 @@ router.get("", (req, res, next) => {
 
 router.delete("/:id", (req, res, next) => {
   Banners.deleteOne({ _id: req.params.id }).then((result) => {
-    console.log(result);
     res.status(200).json({ message: "Data deleted" });
   });
 });

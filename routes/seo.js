@@ -2,29 +2,23 @@ const express = require("express");
 const Seo = require('../models/seo');
 const router = express.Router();
 
-router.post(
-  "",
-  
-  (req, res, next) => {
-    console.log(req.body)
-
-    const banners = new Seo({
-      heading: req.body.heading,
-      description: req.body.description,
-      keyword: req.body.keyword,
+router.post("", (req, res, next) => {
+  const seos = new Seo({
+    title: req.body.title,
+    url: req.body.url,
+    heading: req.body.heading,
+    description: req.body.description,
+    keyword: req.body.keyword,
+  });
+  seos.save().then((createdQuote) => {
+    res.status(201).json({
+      message: "Data received successfully",
+      banner: {
+        ...createdQuote,
+      },
     });
-    console.log(banners)
-    banners.save().then((createdBanner) => {
-      res.status(201).json({
-        message: "Data received successfully",
-        banner: {
-          ...createdBanner,
-        },
-      });
-    });
-  }
-);
-
+  });
+});
 
 router.put(
   "/:id",
@@ -33,6 +27,8 @@ router.put(
     const bannerId = req.params.id;
 
     const updatedSeo = {
+      title: req.body.title,
+      url: req.body.url,
       heading: req.body.heading,
       description: req.body.description,
       keyword: req.body.keyword,
@@ -59,11 +55,6 @@ router.get("", (req, res, next) => {
   });
 });
 
-router.delete("/:id", (req, res, next) => {
-  Seo.deleteOne({ _id: req.params.id }).then((result) => {
-    console.log(result);
-    res.status(200).json({ message: "Data deleted" });
-  });
-});
+
 
 module.exports = router;

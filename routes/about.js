@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
 
     if (isValidImage) {
       error = null;
-      cb(null, "images"); 
+      cb(null, "backend/images"); 
     } 
      else {
       cb(error, null);
@@ -32,7 +32,30 @@ const storage = multer.diskStorage({
   },
 });
 
-
+router.post(
+  "",
+  
+  multer({ storage: storage }).fields([
+    { name: "image", maxCount: 1 }, 
+  ]),
+  (req, res, next) => {
+    const imageUrl = req.protocol + "://" + req.get("host");
+    const image = imageUrl + "/images/" + req.files["image"][0].filename;
+    const about = new About({
+      heading: req.body.heading,
+      description: req.body.description,
+      imagePath: image, 
+    });
+    about.save().then((createdBlog) => {
+      res.status(201).json({
+        message: "Data received successfully",
+        banner: {
+          ...createdBlog,
+        },
+      });
+    });
+  }
+);
 router.post(
   "/:id",
   

@@ -1,15 +1,9 @@
 const express = require("express");
-const Career = require("../models/career");
+const Broucher = require("../models/broucher");
 
 const multer = require("multer");
-const rateLimit = require("express-rate-limit");
 const router = express.Router();
 
-const limiter = rateLimit({
-  windowMs: 24 * 60 * 60 * 1000,
-  max: 5,
-  message: "Too many requests from this IP, please try again later.",
-});
 const MIME_TYPE_MAP = {
   "application/pdf": "pdf", 
 };
@@ -44,33 +38,55 @@ router.post(
   (req, res, next) => {
     const pdfUrl = req.protocol + "://" + req.get("host");
     const pdfPath = pdfUrl + "/files/" + req.files["pdf"][0].filename; 
-    const career = new Career({
-      name: req.body.name,
-      email: req.body.email,
-      phone: req.body.phone,
-      message: req.body.message,
-      position: req.body.position,
+    const broucher = new Broucher({
       pdfPath: pdfPath, 
     });
-    career.save().then((createdCareer) => {
+    broucher.save().then((createdBroucher) => {
       res.status(201).json({
         message: "Data received successfully",
-        career: {
-          ...createdCareer,
+        Broucher: {
+          ...createdBroucher,
         },
       });
     });
   }
 );
-
+router.post(
+    "/:id",
+    
+    multer({ storage: storage }).fields([
+      { name: "pdf", maxCount: 1 },
+  
+    ]),
+    (req, res, next) => {
+      const bannerId = req.params.id;
+  
+      const pdfUrl = req.protocol + "://" + req.get("host");
+      const pdfPath = pdfUrl + "/files/" + req.files["pdf"][0].filename; 
+  
+      const updatedBlog = {
+        pdfPath: pdfPath, 
+      };
+      Broucher.findByIdAndUpdate(bannerId, updatedBlog, { new: true })
+        .then((updatedBlog) => {
+          if (!updatedBlog) {
+            return res.status(404).json({ error: "Banner not found" });
+          }
+          res.status(200).json({ message: "Data updated successfully", banner: updatedBlog });
+        })
+        .catch((error) => {
+          res.status(500).json({ error: "Internal server error" });
+        });
+    }
+  );
 router.get("", (req, res, next) => {
-  Career.find().then((data) => {
-    res.status(200).json({ career: data });
+  Broucher.find().then((data) => {
+    res.status(200).json({ broucher: data });
   });
 });
 
 router.delete("/:id", (req, res, next) => {
-  Career.deleteOne({ _id: req.params.id }).then((result) => {
+  Broucher.deleteOne({ _id: req.params.id }).then((result) => {
     res.status(200).json({ message: "Data deleted" });
   });
 });

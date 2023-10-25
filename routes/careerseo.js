@@ -2,6 +2,24 @@ const express = require("express");
 const CareerSeo = require('../models/careerseo');
 const router = express.Router();
 
+router.post("", (req, res, next) => {
+  const seos = new CareerSeo({
+    title: req.body.title,
+    url: req.body.url,
+    heading: req.body.heading,
+    description: req.body.description,
+    keyword: req.body.keyword,
+  });
+  seos.save().then((createdQuote) => {
+    res.status(201).json({
+      message: "Data received successfully",
+      banner: {
+        ...createdQuote,
+      },
+    });
+  });
+});
+
 router.put(
   "/:id",
   
@@ -9,6 +27,8 @@ router.put(
     const bannerId = req.params.id;
 
     const updatedCareerSeo = {
+      title: req.body.title,
+      url: req.body.url,
       heading: req.body.heading,
       description: req.body.description,
       keyword: req.body.keyword,

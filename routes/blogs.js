@@ -12,17 +12,14 @@ const MIME_TYPE_MAP = {
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const isValidImage = MIME_TYPE_MAP[file.mimetype];
-    console.log(file)
-    console.log(req.body,"BODY")
 
     let error = new Error(
       `Invalid mime type ${file.mimetype}, only image and logo are allowed`
     );
 
     if (isValidImage) {
-      console.log("In multer")
       error = null;
-      cb(null, "images"); 
+      cb(null, "backend/images"); 
     } 
      else {
       cb(error, null);
@@ -41,16 +38,13 @@ router.post(
     { name: "image", maxCount: 1 }, 
   ]),
   (req, res, next) => {
-    console.log(req.body, "Request reached")
     const imageUrl = req.protocol + "://" + req.get("host");
     const image = imageUrl + "/images/" + req.files["image"][0].filename;
-    console.log("imagePath", image)
     const blog = new Blog({
       heading: req.body.heading,
       description: req.body.description,
-      imagePath: req.body.imagePath, 
+      imagePath: image, 
     });
-    console.log("blog", blog)
     blog.save().then((createdBlog) => {
       res.status(201).json({
         message: "Data received successfully",
@@ -86,11 +80,9 @@ router.post(
         if (!updatedBlog) {
           return res.status(404).json({ error: "Banner not found" });
         }
-        console.log(updatedBlog);
         res.status(200).json({ message: "Data updated successfully", banner: updatedBlog });
       })
       .catch((error) => {
-        console.error(error);
         res.status(500).json({ error: "Internal server error" });
       });
   }
@@ -111,11 +103,9 @@ router.put(
         if (!updatedBlog) {
           return res.status(404).json({ error: "Banner not found" });
         }
-        console.log(updatedBlog);
         res.status(200).json({ message: "Data updated successfully", banner: updatedBlog });
       })
       .catch((error) => {
-        console.error(error);
         res.status(500).json({ error: "Internal server error" });
       });
   }
@@ -129,7 +119,6 @@ router.get("", (req, res, next) => {
 
 router.delete("/:id", (req, res, next) => {
   Blog.deleteOne({ _id: req.params.id }).then((result) => {
-    console.log(result);
     res.status(200).json({ message: "Data deleted" });
   });
 });

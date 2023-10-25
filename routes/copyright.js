@@ -2,6 +2,23 @@ const express = require("express");
 const Copyright = require('../models/copyright');
 const router = express.Router();
 
+
+router.post("", (req, res, next) => {
+  
+  const seos = new Copyright({
+    text: req.body.text,
+  });
+  seos.save().then((createdQuote) => {
+    res.status(201).json({
+      message: "Data received successfully",
+      banner: {
+        ...createdQuote,
+      },
+    });
+  });
+});
+
+
 router.put(
   "/:id",
   
