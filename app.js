@@ -21,6 +21,8 @@ const userRoutes = require('./routes/user');
 const careerRoutes = require('./routes/career');
 const copyrightRoutes = require('./routes/copyright');
 const subscriberRoutes = require('./routes/subscribers');
+const connectRoutes = require('./routes/connect');
+const broucherRoutes = require('./routes/broucher');
 const app = express();
 
 
@@ -78,6 +80,8 @@ app.use("/api/user/", userRoutes);
 app.use("/api/copyright/", copyrightRoutes);
 app.use("/api/career/", careerRoutes);
 app.use("/api/subscribers/", subscriberRoutes);
+app.use("/api/connect/", connectRoutes);
+app.use("/api/brouchers/", broucherRoutes);
 app.use((req, res, next)=>{
   res.sendFile(path.join(__dirname,"gaztron", "index.html"));
 });
