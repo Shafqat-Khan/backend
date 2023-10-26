@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
 
     if (isValidImage) {
       error = null;
-      cb(null, "images"); 
+      cb(null, "backend/images"); 
     } 
      else {
       cb(error, null);
@@ -80,11 +80,9 @@ router.post(
         if (!updatedBlog) {
           return res.status(404).json({ error: "Banner not found" });
         }
-        console.log(updatedBlog);
         res.status(200).json({ message: "Data updated successfully", banner: updatedBlog });
       })
       .catch((error) => {
-        console.error(error);
         res.status(500).json({ error: "Internal server error" });
       });
   }
@@ -105,11 +103,9 @@ router.put(
         if (!updatedBlog) {
           return res.status(404).json({ error: "Banner not found" });
         }
-        console.log(updatedBlog);
         res.status(200).json({ message: "Data updated successfully", banner: updatedBlog });
       })
       .catch((error) => {
-        console.error(error);
         res.status(500).json({ error: "Internal server error" });
       });
   }
@@ -123,7 +119,6 @@ router.get("", (req, res, next) => {
 
 router.delete("/:id", (req, res, next) => {
   Blog.deleteOne({ _id: req.params.id }).then((result) => {
-    console.log(result);
     res.status(200).json({ message: "Data deleted" });
   });
 });

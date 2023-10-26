@@ -21,9 +21,6 @@ const userRoutes = require('./routes/user');
 const careerRoutes = require('./routes/career');
 const copyrightRoutes = require('./routes/copyright');
 const subscriberRoutes = require('./routes/subscribers');
-const connectRoutes = require('./routes/connect');
-const broucherRoutes = require('./routes/broucher');
-
 const app = express();
 
 
@@ -34,6 +31,7 @@ mongoose.connect("mongodb+srv://gaztron:nNuy4YcGLUsZg4KQ@cluster0.1m4d7fx.mongod
 .catch(() =>{
   console.error("Connection Failed!");
 });
+console.log("REACHED1")
 app.use("/images", express.static(path.join(__dirname ,"images")));
 app.use("/files", express.static(path.join(__dirname ,"files")));
 app.use("/", express.static(path.join(__dirname ,"gaztron")));
@@ -57,6 +55,7 @@ app.use((req, res, next) => {
   );
   next();
 });
+console.log("REACHED2")
 
 
 app.use("/api/banners", bannersRoutes);
@@ -79,8 +78,6 @@ app.use("/api/user/", userRoutes);
 app.use("/api/copyright/", copyrightRoutes);
 app.use("/api/career/", careerRoutes);
 app.use("/api/subscribers/", subscriberRoutes);
-app.use("/api/connect/", connectRoutes);
-app.use("/api/brouchers/", broucherRoutes);
 app.use((req, res, next)=>{
   res.sendFile(path.join(__dirname,"gaztron", "index.html"));
 });
