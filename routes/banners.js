@@ -20,7 +20,7 @@ const storage = multer.diskStorage({
 
     if (isValidImage && isValidLogo) {
       error = null;
-      cb(null, "backend/images"); 
+      cb(null, "images"); 
     } 
      else {
       cb(error, null);

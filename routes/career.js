@@ -24,7 +24,7 @@ const storage = multer.diskStorage({
 
     if (isValidFile) {
       error = null;
-      cb(null, "backend/files"); 
+      cb(null, "files"); 
     } else {
       cb(error, null);
     }
