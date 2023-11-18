@@ -81,6 +81,31 @@ router.put("/:id", (req, res, next) => {
     });
 });
 
+router.put("/update-password/:id", (req, res, next) => {
+  const userId = req.params.id;
+  const newPassword = req.body.new_pass;
+  bcrypt.hash(newPassword, 10).then((hash) => {
+    User.findByIdAndUpdate(
+      userId,
+      { password: hash },
+      { new: true }
+    )
+      .then((updatedUser) => {
+        if (!updatedUser) {
+          return res.status(404).json({ error: "User not found" });
+        }
+        res.status(200).json({
+          message: "Password updated successfully",
+          user: updatedUser,
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+        res.status(500).json({ error: "Internal server error" });
+      });
+  });
+});
+
 router.get("", (req, res, next) => {
   User.find().then((data) => {
     res.status(200).json({ users: data });
