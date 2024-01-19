@@ -1,5 +1,5 @@
 const express = require("express");
-const Client = require('../models/client');
+const Client = require("../models/client");
 const router = express.Router();
 const multer = require("multer");
 
@@ -19,9 +19,8 @@ const storage = multer.diskStorage({
 
     if (isValidImage) {
       error = null;
-      cb(null, "images"); 
-    } 
-     else {
+      cb(null, "images");
+    } else {
       cb(error, null);
     }
   },
@@ -33,35 +32,33 @@ const storage = multer.diskStorage({
 });
 router.post(
   "",
-  
-  multer({ storage: storage }).fields([
-    { name: "image", maxCount: 1 }, 
-  ]),
+
+  multer({ storage: storage }).fields([{ name: "image", maxCount: 1 }]),
   (req, res, next) => {
-    const imageUrl = req.protocol + "://" + req.get("host");
-    const image = imageUrl + "/images/" + req.files["image"][0].filename;
-    const client = new Client({
-      imagePath: image, 
-    });
-    client.save().then((createdClient) => {
-      res.status(201).json({
-        message: "Data received successfully",
-        banner: {
-          ...createdClient,
-        },
+    try {
+      const imageUrl = req.protocol + "://" + req.get("host");
+      const image = imageUrl + "/images/" + req.files["image"][0].filename;
+      const client = new Client({
+        imagePath: image,
       });
-    });
+      client.save().then((createdClient) => {
+        res.status(201).json({
+          message: "Data received successfully",
+          banner: {
+            ...createdClient,
+          },
+        });
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Internal Server Error" });
+    }
   }
 );
 
-
 router.post(
   "/:id",
-  
-  multer({ storage: storage }).fields([
-    { name: "image", maxCount: 1 },
 
-  ]),
+  multer({ storage: storage }).fields([{ name: "image", maxCount: 1 }]),
   (req, res, next) => {
     const bannerId = req.params.id;
 
@@ -77,7 +74,10 @@ router.post(
           return res.status(404).json({ error: "Banner not found" });
         }
         console.log(updatedClient);
-        res.status(200).json({ message: "Data updated successfully", banner: updatedClient });
+        res.status(200).json({
+          message: "Data updated successfully",
+          banner: updatedClient,
+        });
       })
       .catch((error) => {
         console.error(error);
@@ -87,16 +87,24 @@ router.post(
 );
 
 router.get("", (req, res, next) => {
-  Client.find().then((data) => {
-    res.status(200).json({ clients: data });
-  });
+  try {
+    Client.find().then((data) => {
+      res.status(200).json({ clients: data });
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 router.delete("/:id", (req, res, next) => {
-  Client.deleteOne({ _id: req.params.id }).then((result) => {
-    console.log(result);
-    res.status(200).json({ message: "Data deleted" });
-  });
+  try {
+    Client.deleteOne({ _id: req.params.id }).then((result) => {
+      console.log(result);
+      res.status(200).json({ message: "Data deleted" });
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 module.exports = router;

@@ -20,9 +20,8 @@ const storage = multer.diskStorage({
 
     if (isValidImage && isValidLogo) {
       error = null;
-      cb(null, "images"); 
-    } 
-     else {
+      cb(null, "images");
+    } else {
       cb(error, null);
     }
   },
@@ -35,36 +34,40 @@ const storage = multer.diskStorage({
 
 router.post(
   "",
-  
+
   multer({ storage: storage }).fields([
-    { name: "image", maxCount: 1 }, 
-    { name: "logo", maxCount: 1 },  
+    { name: "image", maxCount: 1 },
+    { name: "logo", maxCount: 1 },
   ]),
   (req, res, next) => {
-    const imageUrl = req.protocol + "://" + req.get("host");
-    const image = imageUrl + "/images/" + req.files["image"][0].filename;
-    const logo = imageUrl + "/images/" + req.files["logo"][0].filename;
-    const banners = new Banners({
-      heading: req.body.heading,
-      description: req.body.description,
-      url: req.body.url,
-      imagePath: image, 
-      logoPath: logo,  
-    });
-    banners.save().then((createdBanner) => {
-      res.status(201).json({
-        message: "Data received successfully",
-        banner: {
-          ...createdBanner,
-        },
+    try {
+      const imageUrl = req.protocol + "://" + req.get("host");
+      const image = imageUrl + "/images/" + req.files["image"][0].filename;
+      const logo = imageUrl + "/images/" + req.files["logo"][0].filename;
+      const banners = new Banners({
+        heading: req.body.heading,
+        description: req.body.description,
+        url: req.body.url,
+        imagePath: image,
+        logoPath: logo,
       });
-    });
+      banners.save().then((createdBanner) => {
+        res.status(201).json({
+          message: "Data received successfully",
+          banner: {
+            ...createdBanner,
+          },
+        });
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Internal Server Error" });
+    }
   }
 );
 
 router.post(
   "/:id",
-  
+
   multer({ storage: storage }).fields([
     { name: "image", maxCount: 1 },
     { name: "logo", maxCount: 1 },
@@ -88,7 +91,10 @@ router.post(
         if (!updatedBanner) {
           return res.status(404).json({ error: "Banner not found" });
         }
-        res.status(200).json({ message: "Data updated successfully", banner: updatedBanner });
+        res.status(200).json({
+          message: "Data updated successfully",
+          banner: updatedBanner,
+        });
       })
       .catch((error) => {
         res.status(500).json({ error: "Internal server error" });
@@ -97,14 +103,13 @@ router.post(
 );
 router.put(
   "/:id",
-  
+
   multer({ storage: storage }).fields([
     { name: "image", maxCount: 1 },
     { name: "logo", maxCount: 1 },
   ]),
   (req, res, next) => {
     const bannerId = req.params.id;
-
 
     const updatedBanner = {
       heading: req.body.heading,
@@ -118,7 +123,10 @@ router.put(
         if (!updatedBanner) {
           return res.status(404).json({ error: "Banner not found" });
         }
-        res.status(200).json({ message: "Data updated successfully", banner: updatedBanner });
+        res.status(200).json({
+          message: "Data updated successfully",
+          banner: updatedBanner,
+        });
       })
       .catch((error) => {
         res.status(500).json({ error: "Internal server error" });
@@ -127,15 +135,23 @@ router.put(
 );
 
 router.get("", (req, res, next) => {
-  Banners.find().then((data) => {
-    res.status(200).json({ banners: data });
-  });
+  try {
+    Banners.find().then((data) => {
+      res.status(200).json({ banners: data });
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 router.delete("/:id", (req, res, next) => {
-  Banners.deleteOne({ _id: req.params.id }).then((result) => {
-    res.status(200).json({ message: "Data deleted" });
-  });
+  try {
+    Banners.deleteOne({ _id: req.params.id }).then((result) => {
+      res.status(200).json({ message: "Data deleted" });
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 module.exports = router;

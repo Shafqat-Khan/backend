@@ -1,27 +1,28 @@
 const express = require("express");
-const Copyright = require('../models/copyright');
+const Copyright = require("../models/copyright");
 const router = express.Router();
 
-
 router.post("", (req, res, next) => {
-  
-  const seos = new Copyright({
-    text: req.body.text,
-  });
-  seos.save().then((createdQuote) => {
-    res.status(201).json({
-      message: "Data received successfully",
-      banner: {
-        ...createdQuote,
-      },
+  try {
+    const seos = new Copyright({
+      text: req.body.text,
     });
-  });
+    seos.save().then((createdQuote) => {
+      res.status(201).json({
+        message: "Data received successfully",
+        banner: {
+          ...createdQuote,
+        },
+      });
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
-
 
 router.put(
   "/:id",
-  
+
   (req, res, next) => {
     const bannerId = req.params.id;
 
@@ -35,7 +36,12 @@ router.put(
           return res.status(404).json({ error: "Banner not found" });
         }
         console.log(updatedCopyright);
-        res.status(200).json({ message: "Data updated successfully", banner: updatedCopyright });
+        res
+          .status(200)
+          .json({
+            message: "Data updated successfully",
+            banner: updatedCopyright,
+          });
       })
       .catch((error) => {
         console.error(error);
@@ -45,11 +51,13 @@ router.put(
 );
 
 router.get("", (req, res, next) => {
-  Copyright.find().then((data) => {
-    res.status(200).json({ data: data });
-  });
+  try {
+    Copyright.find().then((data) => {
+      res.status(200).json({ data: data });
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
-
-
 
 module.exports = router;

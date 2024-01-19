@@ -7,13 +7,17 @@ const contactSchema = mongoose.Schema({
   number1: { type: String, required: true },
   number2: { type: String, required: true },
   number3: { type: String, required: true },
+  whatsapp1: { type: String, required: true },
+  whatsapp2: { type: String, required: true },
+  whatsapp3: { type: String, required: true },
   email1: { type: String, required: true },
   email2: { type: String, required: true },
-  about: { type: String, required: true },
+  email3: { type: String, required: true },
   facebook: { type: String, required: true },
   instagram: { type: String, required: true },
   twitter: { type: String, required: true },
   linkedin: { type: String, required: true },
+  youtube: { type: String, required: true },
 });
 
 module.exports = mongoose.model("Contact", contactSchema);

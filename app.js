@@ -1,56 +1,55 @@
 const express = require("express");
-const mongoose = require('mongoose');
-const path = require('path');
-const bannersRoutes = require('./routes/banners');
-const blogsRoutes = require('./routes/blogs');
-const contantsRoutes = require('./routes/contants');
-const quotesRoutes = require('./routes/quotes');
-const teamsRoutes = require('./routes/teams');
-const aboutRoutes = require('./routes/about');
-const contactRoutes = require('./routes/contact');
-const jobRoutes = require('./routes/job');
-const clientRoutes = require('./routes/client');
-const seoRoutes = require('./routes/seo');
-const aboutSeoRoutes = require('./routes/aboutseo');
-const careerSeoRoutes = require('./routes/careerseo');
-const contactSeoRoutes = require('./routes/contactseo');
-const hydrogenSeoRoutes = require('./routes/hydrogenseo');
-const oxygenSeoRoutes = require('./routes/oxygenseo');
-const nitrogenSeoRoutes = require('./routes/nitrogenseo');
-const userRoutes = require('./routes/user');
-const careerRoutes = require('./routes/career');
-const copyrightRoutes = require('./routes/copyright');
-const subscriberRoutes = require('./routes/subscribers');
-const connectRoutes = require('./routes/connect');
-const broucherRoutes = require('./routes/broucher');
-const productRoutes = require('./routes/product');
+const mongoose = require("mongoose");
+const path = require("path");
+const bannersRoutes = require("./routes/banners");
+const blogsRoutes = require("./routes/blogs");
+const contantsRoutes = require("./routes/contants");
+const quotesRoutes = require("./routes/quotes");
+const teamsRoutes = require("./routes/teams");
+const aboutRoutes = require("./routes/about");
+const contactRoutes = require("./routes/contact");
+const jobRoutes = require("./routes/job");
+const clientRoutes = require("./routes/client");
+const seoRoutes = require("./routes/seo");
+const aboutSeoRoutes = require("./routes/aboutseo");
+const careerSeoRoutes = require("./routes/careerseo");
+const contactSeoRoutes = require("./routes/contactseo");
+const hydrogenSeoRoutes = require("./routes/hydrogenseo");
+const oxygenSeoRoutes = require("./routes/oxygenseo");
+const nitrogenSeoRoutes = require("./routes/nitrogenseo");
+const userRoutes = require("./routes/user");
+const careerRoutes = require("./routes/career");
+const copyrightRoutes = require("./routes/copyright");
+const subscriberRoutes = require("./routes/subscribers");
+const connectRoutes = require("./routes/connect");
+const broucherRoutes = require("./routes/broucher");
+const productRoutes = require("./routes/product");
+const projectsRoutes = require("./routes/projects");
 const app = express();
 
+mongoose
+  .connect(
+    "mongodb+srv://gaztron:nNuy4YcGLUsZg4KQ@cluster0.1m4d7fx.mongodb.net/?retryWrites=true&w=majority"
+  )
+  .then(() => {
+    console.log(`Connected to MongoDB`);
+  })
+  .catch(() => {
+    console.error("Connection Failed!");
+  });
 
-mongoose.connect("mongodb+srv://gaztron:nNuy4YcGLUsZg4KQ@cluster0.1m4d7fx.mongodb.net/?retryWrites=true&w=majority")
-.then(()=>{
-  console.log(`Connected to MongoDB`);
-})
-.catch(() =>{
-  console.error("Connection Failed!");
-});
-console.log("REACHED1")
-app.use("/images", express.static(path.join(__dirname ,"images")));
-app.use("/files", express.static(path.join(__dirname ,"files")));
-app.use("/", express.static(path.join(__dirname ,"gaztron")));
-
-
-
+app.use("/images", express.static(path.join(__dirname, "images")));
+app.use("/files", express.static(path.join(__dirname, "files")));
+app.use("/", express.static(path.join(__dirname, "gaztron")));
 
 app.use(express.json());
 // app.use("/images", express.static(path.join("backend/images")));
 
 app.use((req, res, next) => {
-
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization", 
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
   );
   res.setHeader(
     "Access-Control-Allow-Methods",
@@ -58,8 +57,6 @@ app.use((req, res, next) => {
   );
   next();
 });
-console.log("REACHED2")
-
 
 app.use("/api/banners", bannersRoutes);
 app.use("/api/blogs/", blogsRoutes);
@@ -84,8 +81,9 @@ app.use("/api/subscribers/", subscriberRoutes);
 app.use("/api/connect/", connectRoutes);
 app.use("/api/brouchers/", broucherRoutes);
 app.use("/api/products/", productRoutes);
-app.use((req, res, next)=>{
-  res.sendFile(path.join(__dirname,"gaztron", "index.html"));
+app.use("/api/projects/", projectsRoutes);
+app.use((req, res, next) => {
+  res.sendFile(path.join(__dirname, "gaztron", "index.html"));
 });
 
 module.exports = app;

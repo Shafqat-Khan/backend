@@ -1,5 +1,5 @@
 const express = require("express");
-const Contant = require('../models/contant');
+const Contant = require("../models/contant");
 const router = express.Router();
 const multer = require("multer");
 
@@ -19,9 +19,8 @@ const storage = multer.diskStorage({
 
     if (isValidImage) {
       error = null;
-      cb(null, "images"); 
-    } 
-     else {
+      cb(null, "images");
+    } else {
       cb(error, null);
     }
   },
@@ -33,39 +32,37 @@ const storage = multer.diskStorage({
 });
 router.post(
   "",
-  
-  multer({ storage: storage }).fields([
-    { name: "image", maxCount: 1 }, 
-  ]),
+
+  multer({ storage: storage }).fields([{ name: "image", maxCount: 1 }]),
   (req, res, next) => {
-    const imageUrl = req.protocol + "://" + req.get("host");
-    const image = imageUrl + "/images/" + req.files["image"][0].filename;
-    const banners = new Contant({
-      heading: req.body.heading,
-      contant: req.body.contant,
-      text1: req.body.text1,
-      text2: req.body.text2,
-      imagePath: image, 
-    });
-    banners.save().then((createdBanner) => {
-      res.status(201).json({
-        message: "Data received successfully",
-        banner: {
-          ...createdBanner,
-        },
+    try {
+      const imageUrl = req.protocol + "://" + req.get("host");
+      const image = imageUrl + "/images/" + req.files["image"][0].filename;
+      const banners = new Contant({
+        heading: req.body.heading,
+        contant: req.body.contant,
+        text1: req.body.text1,
+        text2: req.body.text2,
+        imagePath: image,
       });
-    });
+      banners.save().then((createdBanner) => {
+        res.status(201).json({
+          message: "Data received successfully",
+          banner: {
+            ...createdBanner,
+          },
+        });
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Internal Server Error" });
+    }
   }
 );
 
-
 router.post(
   "/:id",
-  
-  multer({ storage: storage }).fields([
-    { name: "image", maxCount: 1 },
 
-  ]),
+  multer({ storage: storage }).fields([{ name: "image", maxCount: 1 }]),
   (req, res, next) => {
     const bannerId = req.params.id;
 
@@ -73,11 +70,11 @@ router.post(
     const image = imageUrl + "/images/" + req.files["image"][0].filename;
 
     const updatedContant = {
-        heading: req.body.heading,
-        contant: req.body.contant,
-        text1: req.body.text1,
-        text2: req.body.text2,
-        imagePath: image, 
+      heading: req.body.heading,
+      contant: req.body.contant,
+      text1: req.body.text1,
+      text2: req.body.text2,
+      imagePath: image,
     };
 
     Contant.findByIdAndUpdate(bannerId, updatedContant, { new: true })
@@ -86,7 +83,10 @@ router.post(
           return res.status(404).json({ error: "Banner not found" });
         }
         console.log(updatedContant);
-        res.status(200).json({ message: "Data updated successfully", banner: updatedContant });
+        res.status(200).json({
+          message: "Data updated successfully",
+          banner: updatedContant,
+        });
       })
       .catch((error) => {
         console.error(error);
@@ -96,16 +96,16 @@ router.post(
 );
 router.put(
   "/:id",
-  
+
   (req, res, next) => {
     const bannerId = req.params.id;
 
     const updatedContant = {
-        heading: req.body.heading,
-        contant: req.body.contant,
-        text1: req.body.text1,
-        text2: req.body.text2,
-        imagePath: req.body.imagePath, 
+      heading: req.body.heading,
+      contant: req.body.contant,
+      text1: req.body.text1,
+      text2: req.body.text2,
+      imagePath: req.body.imagePath,
     };
 
     Contant.findByIdAndUpdate(bannerId, updatedContant, { new: true })
@@ -114,7 +114,10 @@ router.put(
           return res.status(404).json({ error: "Banner not found" });
         }
         console.log(updatedContant);
-        res.status(200).json({ message: "Data updated successfully", banner: updatedContant });
+        res.status(200).json({
+          message: "Data updated successfully",
+          banner: updatedContant,
+        });
       })
       .catch((error) => {
         console.error(error);
@@ -124,16 +127,24 @@ router.put(
 );
 
 router.get("", (req, res, next) => {
-  Contant.find().then((data) => {
-    res.status(200).json({ contants: data });
-  });
+  try {
+    Contant.find().then((data) => {
+      res.status(200).json({ contants: data });
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 router.delete("/:id", (req, res, next) => {
-  Contant.deleteOne({ _id: req.params.id }).then((result) => {
-    console.log(result);
-    res.status(200).json({ message: "Data deleted" });
-  });
+  try {
+    Contant.deleteOne({ _id: req.params.id }).then((result) => {
+      console.log(result);
+      res.status(200).json({ message: "Data deleted" });
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 module.exports = router;

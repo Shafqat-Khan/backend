@@ -1,5 +1,5 @@
 const express = require("express");
-const Blog = require('../models/blog');
+const Blog = require("../models/blog");
 const router = express.Router();
 const multer = require("multer");
 
@@ -19,9 +19,8 @@ const storage = multer.diskStorage({
 
     if (isValidImage) {
       error = null;
-      cb(null, "images"); 
-    } 
-     else {
+      cb(null, "images");
+    } else {
       cb(error, null);
     }
   },
@@ -33,37 +32,35 @@ const storage = multer.diskStorage({
 });
 router.post(
   "",
-  
-  multer({ storage: storage }).fields([
-    { name: "image", maxCount: 1 }, 
-  ]),
+
+  multer({ storage: storage }).fields([{ name: "image", maxCount: 1 }]),
   (req, res, next) => {
-    const imageUrl = req.protocol + "://" + req.get("host");
-    const image = imageUrl + "/images/" + req.files["image"][0].filename;
-    const blog = new Blog({
-      heading: req.body.heading,
-      description: req.body.description,
-      imagePath: image, 
-    });
-    blog.save().then((createdBlog) => {
-      res.status(201).json({
-        message: "Data received successfully",
-        banner: {
-          ...createdBlog,
-        },
+    try {
+      const imageUrl = req.protocol + "://" + req.get("host");
+      const image = imageUrl + "/images/" + req.files["image"][0].filename;
+      const blog = new Blog({
+        heading: req.body.heading,
+        description: req.body.description,
+        imagePath: image,
       });
-    });
+      blog.save().then((createdBlog) => {
+        res.status(201).json({
+          message: "Data received successfully",
+          banner: {
+            ...createdBlog,
+          },
+        });
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Internal Server Error" });
+    }
   }
 );
 
-
 router.post(
   "/:id",
-  
-  multer({ storage: storage }).fields([
-    { name: "image", maxCount: 1 },
 
-  ]),
+  multer({ storage: storage }).fields([{ name: "image", maxCount: 1 }]),
   (req, res, next) => {
     const bannerId = req.params.id;
 
@@ -80,7 +77,9 @@ router.post(
         if (!updatedBlog) {
           return res.status(404).json({ error: "Banner not found" });
         }
-        res.status(200).json({ message: "Data updated successfully", banner: updatedBlog });
+        res
+          .status(200)
+          .json({ message: "Data updated successfully", banner: updatedBlog });
       })
       .catch((error) => {
         res.status(500).json({ error: "Internal server error" });
@@ -89,7 +88,7 @@ router.post(
 );
 router.put(
   "/:id",
-  
+
   (req, res, next) => {
     const bannerId = req.params.id;
 
@@ -103,7 +102,9 @@ router.put(
         if (!updatedBlog) {
           return res.status(404).json({ error: "Banner not found" });
         }
-        res.status(200).json({ message: "Data updated successfully", banner: updatedBlog });
+        res
+          .status(200)
+          .json({ message: "Data updated successfully", banner: updatedBlog });
       })
       .catch((error) => {
         res.status(500).json({ error: "Internal server error" });
@@ -112,15 +113,23 @@ router.put(
 );
 
 router.get("", (req, res, next) => {
-  Blog.find().then((data) => {
-    res.status(200).json({ blogs: data });
-  });
+  try {
+    Blog.find().then((data) => {
+      res.status(200).json({ blogs: data });
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 router.delete("/:id", (req, res, next) => {
-  Blog.deleteOne({ _id: req.params.id }).then((result) => {
-    res.status(200).json({ message: "Data deleted" });
-  });
+  try {
+    Blog.deleteOne({ _id: req.params.id }).then((result) => {
+      res.status(200).json({ message: "Data deleted" });
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 module.exports = router;

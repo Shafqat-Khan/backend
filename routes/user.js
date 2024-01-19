@@ -42,11 +42,11 @@ router.post("/login", (req, res, next) => {
       const token = jwt.sign(
         { email: fetchUser.email, userId: fetchUser._id },
         "secret_gaztron_website_password",
-        { expiresIn: '1h', }
+        { expiresIn: "1h" }
       );
       res.status(200).json({
         token: token,
-        expiresIn: 3600
+        expiresIn: 3600,
       });
     })
     .catch((err) => {
@@ -85,11 +85,7 @@ router.put("/update-password/:id", (req, res, next) => {
   const userId = req.params.id;
   const newPassword = req.body.new_pass;
   bcrypt.hash(newPassword, 10).then((hash) => {
-    User.findByIdAndUpdate(
-      userId,
-      { password: hash },
-      { new: true }
-    )
+    User.findByIdAndUpdate(userId, { password: hash }, { new: true })
       .then((updatedUser) => {
         if (!updatedUser) {
           return res.status(404).json({ error: "User not found" });
@@ -107,11 +103,13 @@ router.put("/update-password/:id", (req, res, next) => {
 });
 
 router.get("", (req, res, next) => {
-  User.find().then((data) => {
-    res.status(200).json({ users: data });
-  });
+  try {
+    User.find().then((data) => {
+      res.status(200).json({ users: data });
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
-
-
 
 module.exports = router;

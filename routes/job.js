@@ -1,32 +1,34 @@
 const express = require("express");
-const Job = require('../models/job');
+const Job = require("../models/job");
 const router = express.Router();
 
 router.post(
   "",
-  
-  (req, res, next) => {
 
-    const banners = new Job({
-      heading: req.body.heading,
-      description: req.body.description,
-    });
-    console.log(banners)
-    banners.save().then((createdBanner) => {
-      res.status(201).json({
-        message: "Data received successfully",
-        banner: {
-          ...createdBanner,
-        },
+  (req, res, next) => {
+    try {
+      const banners = new Job({
+        heading: req.body.heading,
+        description: req.body.description,
       });
-    });
+      console.log(banners);
+      banners.save().then((createdBanner) => {
+        res.status(201).json({
+          message: "Data received successfully",
+          banner: {
+            ...createdBanner,
+          },
+        });
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Internal Server Error" });
+    }
   }
 );
 
-
 router.put(
   "/:id",
-  
+
   (req, res, next) => {
     const bannerId = req.params.id;
 
@@ -41,7 +43,9 @@ router.put(
           return res.status(404).json({ error: "Banner not found" });
         }
         console.log(updatedJob);
-        res.status(200).json({ message: "Data updated successfully", banner: updatedJob });
+        res
+          .status(200)
+          .json({ message: "Data updated successfully", banner: updatedJob });
       })
       .catch((error) => {
         console.error(error);
@@ -51,16 +55,24 @@ router.put(
 );
 
 router.get("", (req, res, next) => {
-  Job.find().then((data) => {
-    res.status(200).json({ jobs: data });
-  });
+  try {
+    Job.find().then((data) => {
+      res.status(200).json({ jobs: data });
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 router.delete("/:id", (req, res, next) => {
-  Job.deleteOne({ _id: req.params.id }).then((result) => {
-    console.log(result);
-    res.status(200).json({ message: "Data deleted" });
-  });
+  try {
+    Job.deleteOne({ _id: req.params.id }).then((result) => {
+      console.log(result);
+      res.status(200).json({ message: "Data deleted" });
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 module.exports = router;
