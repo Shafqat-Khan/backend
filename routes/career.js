@@ -81,7 +81,7 @@ Gaztron`,
 
         const emailInfo1 = await transporter.sendMail({
           from: "gaztronindiaa@gmail.com",
-          to: `info@gaztron.in`,
+          to: `marketing@gaztronengineering.com`,
           subject: "New Job Application",
           text: `You have received a new job application from ${req.body.name} (${req.body.email}). 
 Please review and respond accordingly.

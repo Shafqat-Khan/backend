@@ -48,7 +48,7 @@ Gaztron`,
   
       const emailInfo1 = await transporter.sendMail({
         from: "gaztronindiaa@gmail.com",
-        to: `info@gaztron.in`,
+        to: `marketing@gaztronengineering.com`,
         subject: "New Quote Request",
         text: `You have received a new quote request from ${req.body.name} (${req.body.email}). 
         

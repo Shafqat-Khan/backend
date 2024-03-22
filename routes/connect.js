@@ -45,7 +45,7 @@ Gaztron`,
   
       const emailInfo1 = await transporter.sendMail({
         from: "gaztronindiaa@gmail.com",
-        to: `info@gaztron.in`,
+        to: `marketing@gaztronengineering.com`,
         subject: "New Quick Contact Form Submission",
         text: `You have received a new contact form submission from ${req.body.name} (${req.body.email}). 
 Please review and respond accordingly.

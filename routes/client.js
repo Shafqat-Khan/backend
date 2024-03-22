@@ -39,6 +39,7 @@ router.post(
       const imageUrl = req.protocol + "://" + req.get("host");
       const image = imageUrl + "/images/" + req.files["image"][0].filename;
       const client = new Client({
+      	heading: req.body.heading,
         imagePath: image,
       });
       client.save().then((createdClient) => {
@@ -66,6 +67,7 @@ router.post(
     const image = imageUrl + "/images/" + req.files["image"][0].filename;
 
     const updatedClient = {
+      heading: req.body.heading,
       imagePath: image,
     };
     Client.findByIdAndUpdate(bannerId, updatedClient, { new: true })
