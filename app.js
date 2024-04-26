@@ -25,6 +25,7 @@ const connectRoutes = require("./routes/connect");
 const broucherRoutes = require("./routes/broucher");
 const productRoutes = require("./routes/product");
 const projectsRoutes = require("./routes/projects");
+const images3dRoutes = require('./routes/3d-images');
 const app = express();
 
 mongoose
@@ -82,6 +83,7 @@ app.use("/api/connect/", connectRoutes);
 app.use("/api/brouchers/", broucherRoutes);
 app.use("/api/products/", productRoutes);
 app.use("/api/projects/", projectsRoutes);
+app.use("/api/3dimages/", images3dRoutes);
 app.use((req, res, next) => {
   res.sendFile(path.join(__dirname, "gaztron", "index.html"));
 });

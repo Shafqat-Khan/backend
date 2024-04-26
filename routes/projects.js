@@ -45,6 +45,8 @@ router.post(
 
       const product = new Projects({
         heading: req.body.heading,
+        category: req.body.category,
+        productUrl: req.body.productUrl,
         description: req.body.description,
         productTitle: req.body.productTitle,
         pageTitle: req.body.pageTitle,
@@ -91,6 +93,8 @@ router.post(
 
       const updatedProduct = {
         heading: req.body.heading,
+        category: req.body.category,
+        productUrl: req.body.productUrl,
         description: req.body.description,
         productTitle: req.body.productTitle,
         pageTitle: req.body.pageTitle,
@@ -130,6 +134,8 @@ router.put(
 
       const updatedProduct = {
         heading: req.body.heading,
+        category: req.body.category,
+        productUrl: req.body.productUrl,
         description: req.body.description,
         imagePath: req.body.imagePath,
         youtubeUrls: req.body.youtubeUrls,

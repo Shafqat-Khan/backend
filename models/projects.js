@@ -2,7 +2,9 @@ const mongoose = require("mongoose");
 
 const productSchema = mongoose.Schema({
   productTitle: { type: String, required: true },
+  category: { type: String },
   heading: { type: String, required: true },
+  productUrl: { type: String, required: true },
   description: { type: String, required: true },
   imagePath: { type: [String], required: true },
   youtubeUrls: { type: [String] },
