@@ -38,6 +38,7 @@ router.post(
     { name: "image", maxCount: 1 }, 
   ]),
   (req, res, next) => {
+    console.log(req.body)
     const imageUrl = req.protocol + "://" + req.get("host");
     const image = imageUrl + "/images/" + req.files["image"][0].filename;
     const product = new Images3d({
@@ -83,7 +84,7 @@ router.post(
         res.status(200).json({ message: "Data updated successfully", banner: updatedProduct });
       })
       .catch((error) => {
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Internal server error.." });
       });
   }
 );
@@ -106,7 +107,7 @@ router.put(
         res.status(200).json({ message: "Data updated successfully", banner: updatedProduct });
       })
       .catch((error) => {
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Internal server error.." });
       });
   }
 );
@@ -124,3 +125,4 @@ router.delete("/:id", (req, res, next) => {
 });
 
 module.exports = router;
+
