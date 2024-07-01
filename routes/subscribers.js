@@ -16,7 +16,7 @@ const limiter = rateLimit({
   message: "Too many requests from this IP, please try again later.",
 });
 
-router.post("", limiter, async (req, res, next) => {
+router.post("", async (req, res, next) => {
   try {
     const newSubscriber = new Subscriber({
       email: req.body.email,

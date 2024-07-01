@@ -16,7 +16,7 @@ const limiter = rateLimit({
   message: "Too many requests from this IP, please try again later.",
 });
 
-router.post("", limiter, (req, res, next) => {
+router.post("", (req, res, next) => {
   try {
     const quotes = new Quote({
       name: req.body.name,
